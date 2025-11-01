@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useState,type  ChangeEvent } from 'react';
 import facebook from '../../public/facebook.png';
 import instagram from '../../public/insta.png';
 import gmail from '../../public/email.png';
 
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  description: string;
+}
+
 export default function ContactUs() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
     email: '',
@@ -12,11 +20,14 @@ export default function ContactUs() {
     description: '',
   });
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = () => {
@@ -98,7 +109,7 @@ export default function ContactUs() {
                 width="100%"
                 height="400"
                 style={{ border: 0 }}
-                allowFullScreen=""
+                allowFullScreen={false}
                 loading="lazy"
                 title="Location Map"
               ></iframe>
@@ -182,7 +193,7 @@ export default function ContactUs() {
                   value={formData.description}
                   onChange={handleChange}
                   placeholder="Describe Your Feedback or Query"
-                  rows="4"
+                  rows={4}
                   className="w-full px-4 py-3 rounded-lg bg-[#BEBEBE] border-none focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                 ></textarea>
               </div>

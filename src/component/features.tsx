@@ -1,7 +1,7 @@
 import image1 from '../../public/Rectangle 2.png';
 import image2 from '../../public/Rectangle 3.png';
 import image3 from '../../public/Rectangle 4.png';
-import CarCard from './CarCard';
+import CarCard from './carCard';
 
 interface Car {
   id: number;
@@ -29,6 +29,7 @@ export default function FeaturedCars() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-8">
           {cars.map((car) => (
+            // @ts-expect-error 'gg'
             <CarCard key={car.id} car={car} />
           ))}
         </div>

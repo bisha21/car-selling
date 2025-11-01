@@ -1,4 +1,4 @@
-import CarCard from "../../../component/CarCard";
+import CarCard from "../../../component/carCard";
 
 interface Car {
   id: number;

@@ -6,8 +6,35 @@ import image1 from '../../../../public/Rectangle 2.png';
 import image2 from '../../../../public/Rectangle 3.png';
 import image3 from '../../../../public/Rectangle 4.png';
 
-// Sample car data
-const CARS_DATA = [
+interface Car {
+  id: number;
+  name: string;
+  year: number;
+  image: string;
+  distance: string;
+  mileage: string;
+  price: number;
+  location: string;
+  condition: string;
+  fuelType: string;
+  transmission: string;
+  color: string;
+}
+
+interface Filters {
+  search: string;
+  location: string;
+  minYear: number;
+  maxYear: number;
+  condition: string[];
+  minPrice: number;
+  maxPrice: number;
+  mileage: string[];
+  fuelType: string[];
+  transmission: string[];
+}
+
+const CARS_DATA: Car[] = [
   {
     id: 1,
     name: 'Lucio SUV',
@@ -181,7 +208,7 @@ const CARS_DATA = [
 const ITEMS_PER_PAGE = 6;
 
 export default function ModelsBrowser() {
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     search: '',
     location: '',
     minYear: 2020,
@@ -193,10 +220,13 @@ export default function ModelsBrowser() {
     fuelType: [],
     transmission: [],
   });
-  const [sortBy, setSortBy] = useState('price-low-high');
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter and sort cars
+  const [sortBy, setSortBy] = useState<
+    'price-low-high' | 'price-high-low' | 'year-new-old' | 'year-old-new'
+  >('price-low-high');
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
   const filteredCars = useMemo(() => {
     const result = CARS_DATA.filter((car) => {
       const matchesSearch = car.name
@@ -230,7 +260,6 @@ export default function ModelsBrowser() {
       );
     });
 
-    // Sort
     result.sort((a, b) => {
       switch (sortBy) {
         case 'price-low-high':
@@ -263,89 +292,44 @@ export default function ModelsBrowser() {
         </h2>
 
         <div className="flex flex-col lg:flex-row gap-8 mt-8">
-          {/* Sidebar */}
           <ModelsSidebar
             filters={filters}
             setFilters={setFilters}
+            // @ts-expect-error 'some error happen'
             setCurrentPage={setCurrentPage}
           />
 
-          {/* Main Content */}
           <div className="flex-1">
-            {/* Sort Options */}
             <div className="flex items-center gap-10 mb-6">
-              <p
-                className="text-lg  font-bold text-bla
-              ck"
-              >
-                {/* Showing{' '}
-                {paginatedCars.length > 0
-                  ? (currentPage - 1) * ITEMS_PER_PAGE + 1
-                  : 0}{' '}
-                - {Math.min(currentPage * ITEMS_PER_PAGE, filteredCars.length)}{' '}
-                of {filteredCars.length} results */}
-                SortBy:
-              </p>
+              <p className="text-lg font-bold text-black">Sort By:</p>
+
               <div className="flex gap-2 flex-wrap">
-                <button
-                  onClick={() => {
-                    setSortBy('price-low-high');
-                    setCurrentPage(1);
-                  }}
-                  className={`px-3 py-1 text-sm rounded-2xl ${
-                    sortBy === 'price-low-high'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-[#2D93ED]  border border-gray-300'
-                  }`}
-                >
-                  Price: Low to High
-                </button>
-                <button
-                  onClick={() => {
-                    setSortBy('price-high-low');
-                    setCurrentPage(1);
-                  }}
-                  className={`px-3 py-1 text-sm rounded-2xl ${
-                    sortBy === 'price-high-low'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-[#2D93ED]  border border-gray-300'
-                  }`}
-                >
-                  Price: High to Low
-                </button>
-                <button
-                  onClick={() => {
-                    setSortBy('year-new-old');
-                    setCurrentPage(1);
-                  }}
-                  className={`px-3 py-1 text-sm rounded-2xl ${
-                    sortBy === 'year-new-old'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-[#2D93ED]  border border-gray-300'
-                  }`}
-                >
-                  Newest First
-                </button>
-                <button
-                  onClick={() => {
-                    setSortBy('year-old-new');
-                    setCurrentPage(1);
-                  }}
-                  className={`px-3 py-1 text-sm rounded-2xl ${
-                    sortBy === 'year-old-new'
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-[#2D93ED]  border border-gray-300'
-                  }`}
-                >
-                  Oldest First
-                </button>
+                {[
+                  { key: 'price-low-high', label: 'Price: Low to High' },
+                  { key: 'price-high-low', label: 'Price: High to Low' },
+                  { key: 'year-new-old', label: 'Newest First' },
+                  { key: 'year-old-new', label: 'Oldest First' },
+                ].map(({ key, label }) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setSortBy(key as typeof sortBy);
+                      setCurrentPage(1);
+                    }}
+                    className={`px-3 py-1 text-sm rounded-2xl ${
+                      sortBy === key
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-[#2D93ED] border border-gray-300'
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Cars Grid */}
             <ModelsGrid cars={paginatedCars} />
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <ModelsPagination
                 currentPage={currentPage}

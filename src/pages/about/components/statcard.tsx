@@ -1,4 +1,16 @@
-export default function StatsCard({ icon: Icon, number, label }) {
+import React from 'react';
+
+type StatsCardProps = {
+  icon: React.ElementType; 
+  number: string | number; 
+  label: string; 
+};
+
+export default function StatsCard({
+  icon: Icon,
+  number,
+  label,
+}: StatsCardProps) {
   return (
     <div className="bg-blue-100 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
       <div className="flex justify-center mb-4">

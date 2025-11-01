@@ -1,4 +1,12 @@
-export default function TestimonialCard({ testimonial }) {
+interface TestimonialCardProps {
+  id: number;
+  name: string;
+  role: string;
+  text: string;
+  rating: number;
+  image: string;
+}
+export default function TestimonialCard({ testimonial }:{testimonial:TestimonialCardProps}) {
   return (
     <div className="relative max-w-2xl mx-auto">
       {/* Profile Image */}

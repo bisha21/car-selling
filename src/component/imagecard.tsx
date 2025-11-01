@@ -1,6 +1,5 @@
-import React from 'react';
 
-export default function ImageCard({ image }) {
+export default function ImageCard({ image }:{image:string}) {
   return (
     <div className="relative w-96 h-96 lg:w-md lg:h-112 mx-auto">
       {/* Background offset */}
