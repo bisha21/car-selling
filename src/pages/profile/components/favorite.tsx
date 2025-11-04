@@ -3,15 +3,17 @@ import image1 from './../../../../public/Rectangle 2.png';
 import image2 from './../../../../public/Rectangle 3.png';
 import image3 from './../../../../public/Rectangle 4.png';
 
+// Type definition for a favorite car
 interface FavoriteCar {
-  id: number;
-  model: string;
-  year: number;
-  distance: string;
-  price: string;
-  image: string;
+  id: number; // Unique identifier for the car
+  model: string; // Car model name
+  year: number; // Manufacturing year
+  distance: string; // Distance driven
+  price: string; // Car price
+  image: string; // Car image
 }
 
+// Initial favorite cars data
 const FAVORITE_CARS: FavoriteCar[] = [
   {
     id: 1,
@@ -48,8 +50,10 @@ const FAVORITE_CARS: FavoriteCar[] = [
 ];
 
 export default function ProfileFavorites() {
+  // State to manage favorite cars
   const [favorites, setFavorites] = useState<FavoriteCar[]>(FAVORITE_CARS);
 
+  // Function to remove a car from favorites by id
   const removeFavorite = (id: number) => {
     setFavorites(favorites.filter((car) => car.id !== id));
   };
@@ -57,11 +61,13 @@ export default function ProfileFavorites() {
   return (
     <section className="py-12 px-4 bg-[#f5f5f5]">
       <div className="max-w-6xl mx-auto">
+        {/* Section Title */}
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
           Your Favorites
         </h2>
 
         {favorites.length > 0 ? (
+          // Grid of favorite cars
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {favorites.map((car) => (
               <div key={car.id} className="group cursor-pointer">
@@ -73,7 +79,7 @@ export default function ProfileFavorites() {
                     className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
 
-                  {/* Dark Overlay with Info */}
+                  {/* Overlay on hover with remove button */}
                   <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                     <button
                       onClick={() => removeFavorite(car.id)}
@@ -83,7 +89,7 @@ export default function ProfileFavorites() {
                     </button>
                   </div>
 
-                  {/* Car Info Overlay */}
+                  {/* Car info always visible at the bottom */}
                   <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black to-transparent p-4">
                     <h3 className="text-white font-bold text-lg">
                       {car.model} - {car.year}
@@ -100,6 +106,7 @@ export default function ProfileFavorites() {
             ))}
           </div>
         ) : (
+          // Message when no favorites
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg mb-4">No favorite cars yet</p>
             <a

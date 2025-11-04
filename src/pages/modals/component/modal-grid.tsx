@@ -1,5 +1,6 @@
-import CarCard from "../../../component/carCard";
+import CarCard from '../../../component/carCard';
 
+// Type definition for a single Car object
 interface Car {
   id: number;
   name: string;
@@ -15,11 +16,14 @@ interface Car {
   color: string;
 }
 
+// Props for the ModelsGrid component
 interface ModelsGridProps {
-  cars: Car[];
+  cars: Car[]; // Array of car objects to display
 }
 
+// Grid component that displays a list of cars
 export default function ModelsGrid({ cars }: ModelsGridProps) {
+  // If no cars are found, show a friendly message
   if (cars.length === 0) {
     return (
       <div className="text-center py-12">
@@ -30,9 +34,11 @@ export default function ModelsGrid({ cars }: ModelsGridProps) {
     );
   }
 
+  // Display the cars in a responsive grid layout
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {cars.map((car) => (
+        // Each car is rendered using the CarCard component
         <CarCard key={car.id} car={car} />
       ))}
     </div>

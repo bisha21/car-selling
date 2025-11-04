@@ -2,16 +2,21 @@ export default function Footer() {
   return (
     <footer className="bg-slate-900 text-white py-12 px-6">
       <div className="max-w-7xl mx-auto">
+        {/* Grid layout: 1 column on mobile, 3 columns on medium screens */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+          {/* ===================== */}
           {/* Logo and Tagline */}
-          <div className="flex flex-col items-center md:items-start justify-center ">
+          {/* ===================== */}
+          <div className="flex flex-col items-center md:items-start justify-center">
             <h2 className="text-3xl font-bold tracking-wider mb-2">CAR-BUD</h2>
             <p className="text-sm italic text-gray-300">
               Bringing You Your Dream Car!
             </p>
           </div>
 
+          {/* ===================== */}
           {/* Contact Information */}
+          {/* ===================== */}
           <div className="text-center md:text-left">
             <h3 className="text-xl font-semibold mb-4">Contact</h3>
             <div className="space-y-2 text-sm text-gray-300">
@@ -23,6 +28,7 @@ export default function Footer() {
 
             {/* Social Media Icons */}
             <div className="flex justify-center md:justify-start gap-4 mt-6">
+              {/* Facebook */}
               <a
                 href="#"
                 className="hover:text-blue-400 transition-colors"
@@ -37,6 +43,7 @@ export default function Footer() {
                 </svg>
               </a>
 
+              {/* Instagram */}
               <a
                 href="#"
                 className="hover:text-pink-400 transition-colors"
@@ -51,6 +58,7 @@ export default function Footer() {
                 </svg>
               </a>
 
+              {/* Email */}
               <a
                 href="#"
                 className="hover:text-red-400 transition-colors"
@@ -67,7 +75,9 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Help and Support */}
+          {/* ===================== */}
+          {/* Help and Support Links */}
+          {/* ===================== */}
           <div className="text-center md:text-left">
             <h3 className="text-xl font-semibold mb-4">Help and Support</h3>
             <ul className="space-y-2 text-sm text-gray-300">

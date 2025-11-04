@@ -1,8 +1,10 @@
-import { useState,type  ChangeEvent } from 'react';
+import { useState, type ChangeEvent } from 'react';
+// Import social media icons (assumes these are in your public folder)
 import facebook from '../../public/facebook.png';
 import instagram from '../../public/insta.png';
 import gmail from '../../public/email.png';
 
+// ✅ TypeScript interface for form data
 interface FormData {
   firstName: string;
   lastName: string;
@@ -11,7 +13,9 @@ interface FormData {
   description: string;
 }
 
+// Main ContactUs component
 export default function ContactUs() {
+  // ✅ useState to manage form inputs
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -20,19 +24,22 @@ export default function ContactUs() {
     description: '',
   });
 
+  // ✅ Handle input changes dynamically
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
-      ...prev,
-      [name]: value,
+      ...prev, // keep other fields
+      [name]: value, // update the field that changed
     }));
   };
 
+  // ✅ Handle form submission
   const handleSubmit = () => {
     console.log('Form submitted:', formData);
     alert('Thank you for your feedback!');
+    // Reset form after submission
     setFormData({
       firstName: '',
       lastName: '',
@@ -50,7 +57,7 @@ export default function ContactUs() {
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column */}
+          {/* Left Column: Social Media + Map */}
           <div className="space-y-6">
             {/* Social Media Card */}
             <div className="bg-[#f5f5f5] rounded-lg shadow-xl p-4">
@@ -116,7 +123,7 @@ export default function ContactUs() {
             </div>
           </div>
 
-          {/* Right Column - Feedback Form */}
+          {/* Right Column: Feedback Form */}
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-xl font-bold text-center mb-6">
               Your Feedback is Precious!

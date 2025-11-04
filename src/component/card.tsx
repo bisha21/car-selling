@@ -1,15 +1,25 @@
+// Define the TypeScript interface for testimonial data
 interface TestimonialCardProps {
-  id: number;
-  name: string;
-  role: string;
-  text: string;
-  rating: number;
-  image: string;
+  id: number; // Unique ID for the testimonial
+  name: string; // Name of the person giving testimonial
+  role: string; // Role or title of the person
+  text: string; // The testimonial message
+  rating: number; // Star rating (1-5)
+  image: string; // Profile image URL
 }
-export default function TestimonialCard({ testimonial }:{testimonial:TestimonialCardProps}) {
+
+// Functional component receives a testimonial prop of type TestimonialCardProps
+export default function TestimonialCard({
+  testimonial,
+}: {
+  testimonial: TestimonialCardProps;
+}) {
   return (
     <div className="relative max-w-2xl mx-auto">
-      {/* Profile Image */}
+      {/* =========================
+          Profile Image
+          Positioned absolutely to overlap the card
+      ========================= */}
       <div className="absolute left-0 top-20 z-10">
         <div className="w-24 h-24 rounded-full bg-yellow-400 p-1">
           <img
@@ -23,7 +33,10 @@ export default function TestimonialCard({ testimonial }:{testimonial:Testimonial
         </div>
       </div>
 
-      {/* Top Quote Icon */}
+      {/* =========================
+          Top Quote Icon
+          Decorative element to show quotes
+      ========================= */}
       <div className="absolute left-24 -top-3 z-20">
         <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center">
           <svg
@@ -36,15 +49,23 @@ export default function TestimonialCard({ testimonial }:{testimonial:Testimonial
         </div>
       </div>
 
-      {/* Card */}
+      {/* =========================
+          Main Card
+          Rounded rectangle with shadow and border
+      ========================= */}
       <div className="ml-12 bg-white rounded-2xl border-2 border-yellow-400 p-3 pt-6 shadow-lg">
-        {/* Header */}
+        {/* Header: Name, Role, and Star Rating */}
         <div className="flex justify-between items-start mb-4">
           <div className="flex flex-col">
+            {/* Person's Name */}
             <h3 className="text-2xl font-bold text-gray-900">
               {testimonial.name}
             </h3>
+
+            {/* Underline decoration */}
             <div className="w-24 h-0.5 bg-yellow-400 mt-1"></div>
+
+            {/* Role / Title */}
             <p className="text-sm text-gray-500 mt-1">
               {testimonial.role || 'Client'}
             </p>
@@ -64,12 +85,18 @@ export default function TestimonialCard({ testimonial }:{testimonial:Testimonial
           </div>
         </div>
 
-        {/* Testimonial Text */}
+        {/* =========================
+            Testimonial Text
+            Margin-left to align with card content
+        ========================= */}
         <p className="text-gray-600 leading-relaxed ml-14">
           {testimonial.text}
         </p>
 
-        {/* Bottom Quote Icon */}
+        {/* =========================
+            Bottom Quote Icon
+            Decorative element mirrored from top
+        ========================= */}
         <div className="absolute right-4 -bottom-4">
           <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center top-10">
             <svg

@@ -1,9 +1,7 @@
-
-import type React from 'react';
-
 import { useState } from 'react';
 import { Edit2 } from 'lucide-react';
 
+// Interface defining the shape of a user's profile
 interface UserProfile {
   name: string;
   address: string;
@@ -13,33 +11,43 @@ interface UserProfile {
   image: string;
 }
 
+// Default profile data
 const defaultProfile: UserProfile = {
   name: 'Jonathan Den',
   address: 'Nevada, USA',
   phone: '+1-1234567890',
   email: 'johnden@gmail.com',
   age: 37,
-  image: '/profile-user-avatar.jpg',
+  image:
+    'https://scontent.fkep3-1.fna.fbcdn.net/v/t39.30808-6/486675996_2306283139753191_3056215986891467393_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeEryvjiFXqCGQP5kCx6luTDf2OnTtp0rip_Y6dO2nSuKiRtd7jcdVgzuOCdm8Li9Ohq87hJ8z0Xmy44VYYwoQIo&_nc_ohc=5tb6crND6xYQ7kNvwEk92_2&_nc_oc=Admt2pSJOVtubvWeH5x8rS77IzL052LGfqtAqHNRNl-3Uyn0h7OGULRdNbyvTOn4tr4&_nc_zt=23&_nc_ht=scontent.fkep3-1.fna&_nc_gid=GYjOTMRtUaH0PM1ffH5j5w&oh=00_AfjT_Im3fAvYLk4cnkvQtwTvgJNS3bDAj7KW2LIJAiGABw&oe=690FA008',
 };
 
 export default function ProfileInfo() {
+  // State for storing the current profile info
   const [profile, setProfile] = useState<UserProfile>(defaultProfile);
+
+  // State to toggle edit mode
   const [isEditing, setIsEditing] = useState(false);
+
+  // State for holding form inputs while editing
   const [formData, setFormData] = useState(profile);
 
+  // Handle input changes in the edit form
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'age' ? Number.parseInt(value) : value,
+      [name]: name === 'age' ? Number.parseInt(value) : value, // Convert age to number
     }));
   };
 
+  // Save changes to profile
   const handleSave = () => {
     setProfile(formData);
     setIsEditing(false);
   };
 
+  // Cancel editing and revert form data
   const handleCancel = () => {
     setFormData(profile);
     setIsEditing(false);
@@ -48,85 +56,49 @@ export default function ProfileInfo() {
   return (
     <section className="py-12 px-4 bg-[#f5f5f5]">
       <div className="max-w-4xl mx-auto">
+        {/* Section heading */}
         <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">
           Your Profile
         </h2>
 
-        <div className=" rounded-lg  flex items-center justify-center p-8 ">
+        <div className="rounded-lg flex items-center justify-center p-8">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Profile Image */}
             <div className="shrink-0">
               <img
-                src='https://static.vecteezy.com/system/resources/previews/025/185/764/non_2x/confident-businessman-in-suit-successful-corporate-professional-standing-generated-by-ai-free-photo.jpg'
+                src={profile.image} // Use actual profile image
                 alt={profile.name}
-                className="w-40 h-40 rounded-full object-cover shadow-lg "
+                className="w-40 h-40 rounded-full object-cover shadow-lg"
               />
             </div>
 
             {/* Profile Details */}
             <div className="flex-1">
               {isEditing ? (
+                // Edit mode: show input fields
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Address
-                    </label>
-                    <input
-                      type="text"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Phone
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Age
-                    </label>
-                    <input
-                      type="number"
-                      name="age"
-                      value={formData.age}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                  {['name', 'address', 'phone', 'email', 'age'].map((field) => (
+                    <div key={field}>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        {field.charAt(0).toUpperCase() + field.slice(1)}
+                      </label>
+                      <input
+                        type={
+                          field === 'age'
+                            ? 'number'
+                            : field === 'email'
+                            ? 'email'
+                            : 'text'
+                        }
+                        name={field}
+                        value={formData[field as keyof UserProfile]}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  ))}
+
+                  {/* Save & Cancel buttons */}
                   <div className="flex gap-3 pt-4">
                     <button
                       onClick={handleSave}
@@ -143,48 +115,23 @@ export default function ProfileInfo() {
                   </div>
                 </div>
               ) : (
+                // View mode: show profile info
                 <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <span className="font-semibold text-gray-700 w-24">
-                      Name
-                    </span>
-                    <span className="text-gray-900 font-bold">
-                      : {profile.name}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-semibold text-gray-700 w-24">
-                      Address
-                    </span>
-                    <span className="text-gray-900 font-bold">
-                      : {profile.address}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-semibold text-gray-700 w-24">
-                      Phone
-                    </span>
-                    <span className="text-gray-900 font-bold">
-                      : {profile.phone}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-semibold text-gray-700 w-24">
-                      Email
-                    </span>
-                    <span className="text-gray-900 font-bold">
-                      : {profile.email}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="font-semibold text-gray-700 w-24">
-                      Age
-                    </span>
-                    <span className="text-gray-900 font-bold">
-                      : {profile.age}
-                    </span>
-                  </div>
+                  {Object.entries(profile).map(
+                    ([key, value]) =>
+                      key !== 'image' && (
+                        <div key={key} className="flex items-center gap-4">
+                          <span className="font-semibold text-gray-700 w-24">
+                            {key.charAt(0).toUpperCase() + key.slice(1)}
+                          </span>
+                          <span className="text-gray-900 font-bold">
+                            : {value}
+                          </span>
+                        </div>
+                      )
+                  )}
 
+                  {/* Edit Profile button */}
                   <div className="pt-4">
                     <button
                       onClick={() => setIsEditing(true)}
