@@ -1,17 +1,21 @@
+// components/ModelsBrowser.tsx
 import { useState, useMemo } from 'react';
-import ModelsSidebar from './modal-sidebar';        // Sidebar component for filtering options
-import ModelsGrid from './modal-grid';              // Grid component to display car cards
-import ModelsPagination from './modal-pagination';  // Pagination component for navigating pages
+import ModelsSidebar from './modal-sidebar';
+import ModelsGrid from './modal-grid';
+import ModelsPagination from './modal-pagination';
+import { Filter, X } from 'lucide-react';
+
+// Images (Next.js App Router)
 import image1 from '../../../../public/Rectangle 2.png';
 import image2 from '../../../../public/Rectangle 3.png';
 import image3 from '../../../../public/Rectangle 4.png';
 
-// Type definition for a Car object
+// Types
 interface Car {
   id: number;
   name: string;
   year: number;
-  image: string;
+  image: any;
   distance: string;
   mileage: string;
   price: number;
@@ -22,7 +26,6 @@ interface Car {
   color: string;
 }
 
-// Type definition for Filters
 interface Filters {
   search: string;
   location: string;
@@ -207,10 +210,10 @@ const CARS_DATA: Car[] = [
   },
 ];
 
-const ITEMS_PER_PAGE = 6; // Number of cars displayed per page
+const ITEMS_PER_PAGE = 6;
 
 export default function ModelsBrowser() {
-  // State to hold filter values
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>({
     search: '',
     location: '',
@@ -224,26 +227,35 @@ export default function ModelsBrowser() {
     transmission: [],
   });
 
-  // State to handle sorting
   const [sortBy, setSortBy] = useState<
     'price-low-high' | 'price-high-low' | 'year-new-old' | 'year-old-new'
   >('price-low-high');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // State to track current pagination page
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
-  // Memoized calculation of filtered and sorted cars
   const filteredCars = useMemo(() => {
-    // Filter cars based on current filter state
     const result = CARS_DATA.filter((car) => {
-      const matchesSearch = car.name.toLowerCase().includes(filters.search.toLowerCase());
+      const matchesSearch =
+        !filters.search ||
+        car.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+        car.location.toLowerCase().includes(filters.search.toLowerCase());
+
       const matchesLocation =
-        !filters.location || car.location.toLowerCase().includes(filters.location.toLowerCase());
-      const matchesYear = car.year >= filters.minYear && car.year <= filters.maxYear;
-      const matchesPrice = car.price >= filters.minPrice && car.price <= filters.maxPrice;
-      const matchesCondition = filters.condition.length === 0 || filters.condition.includes(car.condition);
-      const matchesFuelType = filters.fuelType.length === 0 || filters.fuelType.includes(car.fuelType);
-      const matchesTransmission = filters.transmission.length === 0 || filters.transmission.includes(car.transmission);
+        !filters.location ||
+        car.location.toLowerCase().includes(filters.location.toLowerCase());
+
+      const matchesYear =
+        car.year >= filters.minYear && car.year <= filters.maxYear;
+      const matchesPrice =
+        car.price >= filters.minPrice && car.price <= filters.maxPrice;
+      const matchesCondition =
+        filters.condition.length === 0 ||
+        filters.condition.includes(car.condition);
+      const matchesFuel =
+        filters.fuelType.length === 0 ||
+        filters.fuelType.includes(car.fuelType);
+      const matchesTrans =
+        filters.transmission.length === 0 ||
+        filters.transmission.includes(car.transmission);
 
       return (
         matchesSearch &&
@@ -251,12 +263,11 @@ export default function ModelsBrowser() {
         matchesYear &&
         matchesPrice &&
         matchesCondition &&
-        matchesFuelType &&
-        matchesTransmission
+        matchesFuel &&
+        matchesTrans
       );
     });
 
-    // Sort the filtered cars based on selected sort option
     result.sort((a, b) => {
       switch (sortBy) {
         case 'price-low-high':
@@ -273,41 +284,50 @@ export default function ModelsBrowser() {
     });
 
     return result;
-  }, [filters, sortBy]); // Recalculate only when filters or sortBy change
+  }, [filters, sortBy]);
 
-  // Calculate total number of pages
   const totalPages = Math.ceil(filteredCars.length / ITEMS_PER_PAGE);
-
-  // Slice filtered cars for the current page
   const paginatedCars = filteredCars.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
   return (
-    <section className="py-12 px-4 md:px-8 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
-        {/* Section title */}
-        <h2 className="text-3xl font-bold mb-2 text-center">
-          Browse through the models
-        </h2>
+    <>
+      <section className="py-8 px-4 bg-gray-50 min-h-screen">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+            Browse through the models
+          </h2>
 
-        <div className="flex flex-col lg:flex-row gap-8 mt-8">
-          {/* Sidebar for filtering */}
-          <ModelsSidebar
-            filters={filters}
-            setFilters={setFilters}
-            // Reset current page when filters change
-            // @ts-expect-error temporary TS error handling
-            setCurrentPage={setCurrentPage}
-          />
+          {/* Mobile Filter Button */}
+          <div className="lg:hidden mb-6">
+            <button
+              onClick={() => setIsDrawerOpen(true)}
+              className="w-full bg-linear-to-r from-blue-600 to-blue-700 text-white py-4 rounded-2xl font-bold text-lg shadow-xl flex items-center justify-center gap-3 hover:shadow-2xl transition-all"
+            >
+              <Filter size={24} />
+              Filters ({filteredCars.length} cars)
+            </button>
+          </div>
 
-          {/* Main content area */}
-          <div className="flex-1">
-            {/* Sorting options */}
-            <div className="flex items-center gap-10 mb-6">
-              <p className="text-lg font-bold text-black">Sort By:</p>
-              <div className="flex gap-2 flex-wrap">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Desktop Sidebar */}
+            <aside className="hidden lg:block w-80">
+              <ModelsSidebar
+                filters={filters}
+                setFilters={setFilters}
+                // @ts-expect-error "some ts err occuer"
+
+                setCurrentPage={setCurrentPage}
+              />
+            </aside>
+
+            {/* Main Content */}
+            <div className="flex-1">
+              {/* Sort Buttons */}
+              <div className="flex flex-wrap items-center gap-3 mb-6">
+                <span className="font-bold text-gray-800">Sort by:</span>
                 {[
                   { key: 'price-low-high', label: 'Price: Low to High' },
                   { key: 'price-high-low', label: 'Price: High to Low' },
@@ -318,34 +338,105 @@ export default function ModelsBrowser() {
                     key={key}
                     onClick={() => {
                       setSortBy(key as typeof sortBy);
-                      setCurrentPage(1); // Reset to first page when sorting changes
+                      setCurrentPage(1);
                     }}
-                    className={`px-3 py-1 text-sm rounded-2xl ${
+                    className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
                       sortBy === key
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-[#2D93ED] border border-gray-300'
+                        ? 'bg-blue-600 text-white shadow-lg'
+                        : 'bg-white border-2 border-gray-300 hover:border-blue-500'
                     }`}
                   >
                     {label}
                   </button>
                 ))}
               </div>
+
+              <p className="text-gray-600 mb-6">
+                Showing {paginatedCars.length} of {filteredCars.length} cars
+              </p>
+
+              <ModelsGrid cars={paginatedCars} />
+
+              {totalPages > 1 && (
+                <div className="mt-10">
+                  <ModelsPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
+                  />
+                </div>
+              )}
             </div>
-
-            {/* Display cars grid */}
-            <ModelsGrid cars={paginatedCars} />
-
-            {/* Pagination component */}
-            {totalPages > 1 && (
-              <ModelsPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={setCurrentPage}
-              />
-            )}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Mobile Drawer (Right Side) */}
+      {isDrawerOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div
+            className="absolute inset-0 bg-black bg-opacity-60"
+            onClick={() => setIsDrawerOpen(false)}
+          />
+
+          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
+            {/* Header */}
+            <div className="p-5 bg-linear-to-r from-blue-600 to-blue-700 text-white border-b">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xl font-bold">Filters</h3>
+                <button
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition"
+                >
+                  <X size={28} />
+                </button>
+              </div>
+            </div>
+
+            {/* Filters */}
+            <div className="flex-1 overflow-y-auto p-5">
+              <ModelsSidebar
+                filters={filters}
+                setFilters={setFilters}
+                // @ts-expect-error "some ts err occuer"
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
+
+            {/* Footer */}
+            <div className="p-5 border-t bg-white">
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setFilters({
+                      search: '',
+                      location: '',
+                      minYear: 2020,
+                      maxYear: 2025,
+                      condition: [],
+                      minPrice: 0,
+                      maxPrice: 100000,
+                      mileage: [],
+                      fuelType: [],
+                      transmission: [],
+                    });
+                    setCurrentPage(1);
+                  }}
+                  className="flex-1 border-2 border-gray-400 py-3.5 rounded-xl font-bold hover:bg-gray-100 transition"
+                >
+                  Clear All
+                </button>
+                <button
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="flex-1 bg-linear-to-r from-blue-600 to-blue-700 text-white py-3.5 rounded-xl font-bold shadow-lg hover:shadow-xl transition"
+                >
+                  Show Results ({filteredCars.length})
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

@@ -42,8 +42,10 @@ export default function Hero() {
             <img
               src={slide.image || '/placeholder.svg'}
               alt={slide.title}
-              className="w-full h-full object-fill"
+              className="w-full h-full object-cover  transition-transform duration-700 ease-in-out"
             />
+            <div className="absolute inset-0 bg-black/40" />
+
             {/* Dark overlay for better readability */}
             <div className="absolute inset-0 bg-black/30" />
           </div>

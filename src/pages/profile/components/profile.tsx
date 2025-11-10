@@ -13,11 +13,11 @@ interface UserProfile {
 
 // Default profile data
 const defaultProfile: UserProfile = {
-  name: 'Jonathan Den',
+  name: 'Sagar Timilsina',
   address: 'Nevada, USA',
   phone: '+1-1234567890',
   email: 'johnden@gmail.com',
-  age: 37,
+  age: 20,
   image:
     'https://scontent.fkep3-1.fna.fbcdn.net/v/t39.30808-6/486675996_2306283139753191_3056215986891467393_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=a5f93a&_nc_eui2=AeEryvjiFXqCGQP5kCx6luTDf2OnTtp0rip_Y6dO2nSuKiRtd7jcdVgzuOCdm8Li9Ohq87hJ8z0Xmy44VYYwoQIo&_nc_ohc=5tb6crND6xYQ7kNvwEk92_2&_nc_oc=Admt2pSJOVtubvWeH5x8rS77IzL052LGfqtAqHNRNl-3Uyn0h7OGULRdNbyvTOn4tr4&_nc_zt=23&_nc_ht=scontent.fkep3-1.fna&_nc_gid=GYjOTMRtUaH0PM1ffH5j5w&oh=00_AfjT_Im3fAvYLk4cnkvQtwTvgJNS3bDAj7KW2LIJAiGABw&oe=690FA008',
 };
